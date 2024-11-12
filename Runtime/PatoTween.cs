@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using System.Linq;
 using System;
+using System.Linq;
 
 namespace PTween
 {
@@ -29,30 +28,29 @@ namespace PTween
 
         private Dictionary<string, IPTween> _activeTweens = new();
 
-
+        private KeyValuePair<string, IPTween> tw = new();
+        private KeyValuePair<string, IPTween>[] _currentActive;
 
         private void Update()
-        {
-            foreach(var tw in _activeTweens.ToList())
+        {            
+            for(int i = 0; i < _activeTweens.Count; i++)
             {
+                tw = _currentActive[i];
                 IPTween tween = tw.Value;
+
 
                 tween.Update();
 
 
-                if(tween.IsComplete && !tween.WasKilled)
-                {
-                    if(tween.onComplete != null)
-                    {
-                        tween.onComplete.Invoke();
-                    }
-
-                    RemoveTween(tw.Key);
-                }
-                
                 if(tween.WasKilled)
                 {
-                    //RemoveTween(tw.Key);
+                    RemoveTween(tw.Key);
+                }
+                if(tween.IsComplete)
+                {
+                    tween.onComplete?.Invoke();
+
+                    RemoveTween(tw.Key);
                 }
             }
         }
@@ -70,6 +68,8 @@ namespace PTween
             if(LogLevel > 0)Debug.Log($"Created tween: {tween.Identifier}");
 
             _activeTweens[tween.Identifier] = tween;
+
+            _currentActive = _activeTweens.ToArray();
         }
 
         public void RemoveTween(string id)
@@ -77,6 +77,8 @@ namespace PTween
             if(LogLevel > 0)Debug.Log($"Removed tween: {id}");
 
             _activeTweens.Remove(id);
+        
+            _currentActive = _activeTweens.ToArray();
         }
 
 

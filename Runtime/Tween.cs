@@ -1,6 +1,4 @@
 using System;
-using System.ComponentModel;
-using Codice.Client.BaseCommands.Merge.Xml;
 using UnityEngine;
 
 
@@ -34,12 +32,16 @@ namespace PTween
         
         private Tween<T> _appendedTween;
 
+
+        private T currentVal;
+
         public Tween(object target, string id, T startV, T endV, float time, Action<T> tweenUpdate)
         {
             if(time <= 0f)
             {
                 throw new IndexOutOfRangeException($"Cannot Tween a value out of bounds ({time} is less or equal to 0)");
             }
+
             Target = target;
             Identifier = id;
 
@@ -54,17 +56,22 @@ namespace PTween
         /// <summary> Returns the Target of this tween. </summary>
         /// <remarks> Cant change its value after creating the tween. </remarks> 
         public object Target { get; private set; }
+        
         /// <summary> Returns true if the tween has finished executing. </summary>
         public bool IsComplete { get; private set; }
+        
         /// <summary> Returns true if the Target of this tween was destroyed while it was executing. </summary>
         /// <remarks> You can access the Target via the Target variable. </remarks> 
         public bool WasKilled { get; private set; }
+        
         /// <summary> Returns true if the Tween is paused. </summary>
         /// <remarks> You can pause/resume a tween with Pause()/Resume() methods respectively. </remarks> 
         public bool IsPaused { get; private set; }
+        
         /// <summary> Returns true if this tween ignores the time scale. </summary>
         /// <remarks> You can change this value via the SetIgnoreTimeScale() method. </remarks> 
         public bool IgnoreTimeScale { get; private set; }
+
         /// <summary> Returns the identifier of this tween. </summary>
         /// <remarks> Cant change its value after creating the tween. </remarks> 
         public string Identifier { get; private set; }
@@ -72,11 +79,12 @@ namespace PTween
         /// <remarks> You can set this value with the SetStartDelay() method. </remarks> 
         public float Delay { get; private set; }
 
-        
         /// <summary> Returns the methods to execute when the tween completes. </summary>
         /// <remarks> You can set this value with the OnComplete() method. </remarks> 
         public Action onComplete { get; set; }
 
+
+        
         public bool IsTargetDestroyed()
         {
             
@@ -105,10 +113,7 @@ namespace PTween
             WasKilled = true;
             onComplete = null;
 
-            KillOnComplete();
-
-        
-            
+            KillOnComplete();    
         }
 
 
@@ -130,7 +135,7 @@ namespace PTween
 
         public void Resume()
         {
-            if(!IsPaused) Debug.LogWarning("A playing Tween has been Resumed, this is and may impact performance");
+            if(!IsPaused) Debug.LogWarning("A playing Tween has been Resumed, this is redundant and may impact performance");
             IsPaused = false;
         }
 
@@ -151,7 +156,7 @@ namespace PTween
                 else
                     _delayElapsedTime += Time.deltaTime;
             
-                if(Delay >= _delayElapsedTime) return;
+                return;
             }
 
             if(IsComplete || IsPaused) return;
@@ -164,50 +169,52 @@ namespace PTween
                 _elapsedTime += Time.deltaTime;
 
 
-            if(_elapsedTime >= _time) _elapsedTime = _time;
-
-            float t = _elapsedTime / _time;
-            float easedT = EaseMult(_currentEase, t);
-
-            T currentVal;
-
-            if(_reverse)
-            {
-                currentVal = Interpolate(_endVal, _startVal, easedT);
-
-            } else
-            {
-                currentVal = Interpolate(_startVal, _endVal, easedT);
-                
-            }
-            
-
-            _onUpdate?.Invoke();
-            _onTweenUpdate?.Invoke(currentVal);
-
-
-            if(_percentThreshold >= 0 && t >= _percentThreshold)
-            {
-                _onThreshold?.Invoke();
-                _percentThreshold = -1;
-            }
-
-
             if(_elapsedTime >= _time)
             {
-                _loopsDone ++;
-                _elapsedTime = 0f;
 
+                _elapsedTime = _time;
+                
                 if(_pingPong) _reverse = !_reverse;
 
                 _percentThreshold = _originPercentThreshold;
 
-                if(_loopsDone > _loops || _loops == 0)
+                if(_loops == 0)
                 {
-                    if(_appendedTween == null)KillOnComplete();
-                    IsComplete = true;
+                    _loopsDone ++;
+                    _elapsedTime = 0f;
+                    
+                    if(_loopsDone > _loops)
+                    {
+                        if(_appendedTween == null)KillOnComplete();
+                        IsComplete = true;
+                    }
+                }
+            } else
+            {
+                float t = _elapsedTime / _time;
+                float easedT = EaseMult(_currentEase, t);
+
+                if(_reverse)
+                {
+                    currentVal = Interpolate(_endVal, _startVal, easedT);
+
+                } else
+                {
+                    currentVal = Interpolate(_startVal, _endVal, easedT);
+                    
+                }
+                
+                _onUpdate?.Invoke();
+                _onTweenUpdate?.Invoke(currentVal);
+
+                if(_percentThreshold >= 0 && t >= _percentThreshold)
+                {
+                    _onThreshold?.Invoke();
+                    _percentThreshold = -1;
                 }
             }
+
+            
         }
 
         public T Interpolate(T start, T end, float Tm)
@@ -225,7 +232,7 @@ namespace PTween
                 return (T)(object)Color.Lerp(startColor, endColor, Tm);
 
             if(start is bool startBool) 
-                return (IsComplete ? (T)(object)!startBool : (T)(object)startBool );
+                return IsComplete ? (T)(object)!startBool : (T)(object)startBool ;
 
             if(start is Sprite startSprite && end is Sprite endSprite) 
                 return IsComplete ? (T)(object)startSprite : (T)(object)endSprite;
@@ -233,7 +240,7 @@ namespace PTween
             throw new NotImplementedException($"Interpolation for type {typeof(T)} is missing or not defined. --");
         }
 
-        #region  Properties methods
+        #region  Property methods
 
         /// <summary>
         /// Sets the Ease type of the tween to a given EaseType
