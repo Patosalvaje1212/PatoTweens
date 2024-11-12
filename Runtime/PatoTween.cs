@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Linq;
+
 
 namespace PTween
 {
@@ -69,7 +69,7 @@ namespace PTween
 
             _activeTweens[tween.Identifier] = tween;
 
-            _currentActive = _activeTweens.ToArray();
+            _currentActive =  System.Linq.Enumerable.ToArray<KeyValuePair<string, IPTween>>(System.Linq.Enumerable.AsEnumerable( _activeTweens));
         }
 
         public void RemoveTween(string id)
@@ -77,8 +77,9 @@ namespace PTween
             if(LogLevel > 0)Debug.Log($"Removed tween: {id}");
 
             _activeTweens.Remove(id);
-        
-            _currentActive = _activeTweens.ToArray();
+
+            _currentActive =  System.Linq.Enumerable.ToArray<KeyValuePair<string, IPTween>>(System.Linq.Enumerable.AsEnumerable( _activeTweens));
+
         }
 
 
