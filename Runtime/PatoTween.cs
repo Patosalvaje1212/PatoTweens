@@ -27,59 +27,53 @@ namespace PTween
         public int LogLevel = 0;
 
         private Dictionary<string, IPTween> _activeTweens = new();
-
-        private KeyValuePair<string, IPTween> tw = new();
-        private KeyValuePair<string, IPTween>[] _currentActive;
+        private List<string> _toErease = new();
 
         private void Update()
-        {            
-            for(int i = 0; i < _activeTweens.Count; i++)
+        {
+            foreach(var current in _activeTweens)
             {
-                tw = _currentActive[i];
-                IPTween tween = tw.Value;
+                
+                current.Value.Update();
 
-
-                tween.Update();
-
-
-                if(tween.WasKilled)
+                if(current.Value.WasKilled)
                 {
-                    RemoveTween(tw.Key);
+                    _toErease.Add(current.Key);
                 }
-                if(tween.IsComplete)
+                if(current.Value.IsComplete)
                 {
-                    tween.onComplete?.Invoke();
+                    current.Value.onComplete?.Invoke();
 
-                    RemoveTween(tw.Key);
+                    _toErease.Add(current.Key);
                 }
             }
+
+            for (int i = _toErease.Count - 1; i >= 0; i--)
+            {
+                RemoveTween(_toErease[i]);
+            }
+            _toErease.Clear();
         }
 
-        public void AddTween<T>(IPTween tween)
+        public void AddTween(IPTween tween)
         {
-            TwCount ++;
-
-            /*if(_activeTweens.ContainsKey(tween.Identifier))
+            
+            if(_activeTweens.ContainsKey(tween.Identifier))
             {
-                Debug.LogWarning($"Tween with ID:{tween.Identifier} is already executing. Deleting old instance");
-                _activeTweens[tween.Identifier].KillOnComplete();
-            }*/
+                throw new OverflowException($"A tween with id {tween.Identifier} already exist. Do not tween the same value at the same time");                
+            }
+
+            _activeTweens.Add(tween.Identifier, tween);
 
             if(LogLevel > 0)Debug.Log($"Created tween: {tween.Identifier}");
-
-            _activeTweens[tween.Identifier] = tween;
-
-            _currentActive =  System.Linq.Enumerable.ToArray<KeyValuePair<string, IPTween>>(System.Linq.Enumerable.AsEnumerable( _activeTweens));
+            
         }
 
         public void RemoveTween(string id)
         {
-            if(LogLevel > 0)Debug.Log($"Removed tween: {id}");
-
             _activeTweens.Remove(id);
 
-            _currentActive =  System.Linq.Enumerable.ToArray<KeyValuePair<string, IPTween>>(System.Linq.Enumerable.AsEnumerable( _activeTweens));
-
+            if(LogLevel > 0)Debug.Log($"Removed tween: {id}");
         }
 
 
@@ -90,15 +84,15 @@ namespace PTween
         /// </summary>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<bool> WaitTime(float time)
+        public static Tween WaitTime(float time)
         {
-            Func<bool> target = () => {
+            Func<object> target = () => {
                 return true;
             };
 
             string newId = $"{target.Target.GetHashCode()}_WaitingTime - {TwCount}";
 
-            Tween<bool> myT = new(target, newId, true, true, time, value => {});
+            Tween myT = new(target, newId, true, true, time, value => {});
 
             return myT;
         }
@@ -112,7 +106,7 @@ namespace PTween
         /// <param name="endV">End value of the tween</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<float> TweenFloat(Func<float> target, Action<float> result, float endV, float time)
+        public static Tween TweenFloat(Func<float> target, Action<float> result, float endV, float time)
         {
             string newId = $"{target.Target.GetHashCode()}_{TwCount}_Float";
             
@@ -120,8 +114,8 @@ namespace PTween
 
             float startVal = target();
 
-            Tween<float> myT = new(target, newId, startVal, endV, time, value=> {
-                result(value);
+            Tween myT = new(target, newId, startVal, endV, time, value=> {
+                result((float)value);
             });
 
             return myT;
@@ -136,7 +130,7 @@ namespace PTween
         /// <param name="endV">End value of the tween </param>
         /// <param name="time">Amount of seconds </param>
         /// <returns></returns>
-        public static Tween<Vector3> TweenVector3(Func<Vector3> target, Action<Vector3> result, Vector3 endV, float time)
+        public static Tween TweenVector3(Func<Vector3> target, Action<Vector3> result, Vector3 endV, float time)
         {
             string newId = $"{target.Target.GetHashCode()}_{TwCount}_Vector3";
             
@@ -144,8 +138,8 @@ namespace PTween
 
             Vector3 startVal = target();
 
-            Tween<Vector3> myT = new(target, newId, startVal, endV, time, value=> {
-                result(value);
+            Tween myT = new(target, newId, startVal, endV, time, value=> {
+                result((Vector3)value);
             });
 
             return myT;
@@ -161,7 +155,7 @@ namespace PTween
         /// <param name="endV">End value of the tween </param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<Color> TweenColor(Func<Color> target, Action<Color> result, Color endV, float time)
+        public static Tween TweenColor(Func<Color> target, Action<Color> result, Color endV, float time)
         {
             string newId = $"{target.Target.GetHashCode()}_{TwCount}_Color";
             
@@ -169,8 +163,8 @@ namespace PTween
 
             Color startVal = target();
 
-            Tween<Color> myT = new(target, newId, startVal, endV, time, value=> {
-                result(value);
+            Tween myT = new(target, newId, startVal, endV, time, value=> {
+                result((Color)value);
             });
 
             return myT;
@@ -188,12 +182,12 @@ namespace PTween
         /// <param name="endV">End value of the tween</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<float> TweenSpriteAlpha(SpriteRenderer target, float startV, float endV, float time)
+        public static Tween TweenSpriteAlpha(SpriteRenderer target, float startV, float endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Alpha_{TwCount}";
-            Tween<float> myT = new(target, newId, startV, endV, time, value=> {
+            Tween myT = new(target, newId, startV, endV, time, value=> {
                 Color newCol = target.color;
-                newCol.a = value;
+                newCol.a = (float)value;
 
                 target.color = newCol;
             });
@@ -210,7 +204,7 @@ namespace PTween
         /// <param name="endV">End value of the tween</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<float> TweenSpriteAlpha(GameObject gameobj, float startV, float endV, float time)
+        public static Tween TweenSpriteAlpha(GameObject gameobj, float startV, float endV, float time)
         {
 
             SpriteRenderer target = gameobj.GetComponent<SpriteRenderer>();
@@ -218,9 +212,9 @@ namespace PTween
             string newId = $"{target.GetInstanceID()}_Alpha_{TwCount}";
 
 
-            Tween<float> myT = new(gameobj, newId, startV, endV, time, value=> {
+            Tween myT = new(gameobj, newId, startV, endV, time, value=> {
                 Color newCol = target.color;
-                newCol.a = value;
+                newCol.a = (float)value;
 
                 target.color = newCol;
             });
@@ -236,11 +230,11 @@ namespace PTween
         /// <param name="endV">End value of the tween</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<Color> TweenSpriteColor(SpriteRenderer target, Color startV, Color endV, float time)
+        public static Tween TweenSpriteColor(SpriteRenderer target, Color startV, Color endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Alpha_{TwCount}";
-            Tween<Color> myT = new(target.gameObject.name, newId, startV, endV, time, value=> {
-                target.color = value;
+            Tween myT = new(target.gameObject.name, newId, startV, endV, time, value=> {
+                target.color = (Color)value;
             });
 
             return myT;
@@ -255,7 +249,7 @@ namespace PTween
         /// <param name="endV">End value of the tween</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<Color> TweenSpriteColor(GameObject gameobj, Color startV, Color endV, float time)
+        public static Tween TweenSpriteColor(GameObject gameobj, Color startV, Color endV, float time)
         {
 
             SpriteRenderer target = gameobj.GetComponent<SpriteRenderer>();
@@ -263,8 +257,8 @@ namespace PTween
             string newId = $"{target.GetInstanceID()}_Alpha_{TwCount}";
 
 
-            Tween<Color> myT = new(gameobj.name, newId, startV, endV, time, value=> {
-                target.color = value;
+            Tween myT = new(gameobj.name, newId, startV, endV, time, value=> {
+                target.color = (Color)value;
             });
 
             return myT;
@@ -279,12 +273,12 @@ namespace PTween
         /// <param name="endV">Sprite to switch to</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<Sprite> TweenSprite(SpriteRenderer target, Sprite startV, Sprite endV, float time)
+        public static Tween TweenSprite(SpriteRenderer target, Sprite startV, Sprite endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_SpriteChange_{TwCount}";
 
-            Tween<Sprite> myT = new(target, newId, startV, endV, time, value =>{
-                target.sprite = value;
+            Tween myT = new(target, newId, startV, endV, time, value =>{
+                target.sprite = (Sprite)value;
             });
             return myT;
         }
@@ -300,7 +294,7 @@ namespace PTween
         /// <param name="endV">Sprite to switch to</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<Sprite> TweenSprite(GameObject gameobj, Sprite startV, Sprite endV, float time)
+        public static Tween TweenSprite(GameObject gameobj, Sprite startV, Sprite endV, float time)
         {
 
             SpriteRenderer target = gameobj.GetComponent<SpriteRenderer>();
@@ -308,8 +302,8 @@ namespace PTween
             string newId = $"{target.GetInstanceID()}_Alpha_{TwCount}";
 
 
-            Tween<Sprite> myT = new(gameobj.name, newId, startV, endV, time, value=> {
-                target.sprite = value;
+            Tween myT = new(gameobj.name, newId, startV, endV, time, value=> {
+                target.sprite = (Sprite)value;
             });
 
             return myT;
@@ -332,11 +326,11 @@ namespace PTween
         /// <param name="endV">End position</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<Vector3> TweenPosition(Transform target, Vector3 startV, Vector3 endV, float time)
+        public static Tween TweenPosition(Transform target, Vector3 startV, Vector3 endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Position_{TwCount}";
-            Tween<Vector3> myT = new(target, newId, startV, endV, time, value=> {
-                target.position = value;
+            Tween myT = new(target, newId, startV, endV, time, value=> {
+                target.position = (Vector3)value;
             });
 
             return myT;
@@ -350,11 +344,11 @@ namespace PTween
         /// <param name="endV">End position</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<Vector3> TweenLocalPosition(Transform target, Vector3 startV, Vector3 endV, float time)
+        public static Tween TweenLocalPosition(Transform target, Vector3 startV, Vector3 endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Position_{TwCount}";
-            Tween<Vector3> myT = new(target, newId, startV, endV, time, value=> {
-                target.localPosition = value;
+            Tween myT = new(target, newId, startV, endV, time, value=> {
+                target.localPosition = (Vector3)value;
             });
 
             return myT;
@@ -368,11 +362,11 @@ namespace PTween
         /// <param name="endV">End scale</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<Vector3> TweenScale(Transform target, Vector3 startV, Vector3 endV, float time)
+        public static Tween TweenScale(Transform target, Vector3 startV, Vector3 endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Scale_{TwCount}";
-            Tween<Vector3> myT = new(target, newId, startV, endV, time, value=> {
-                target.localScale = value;
+            Tween myT = new(target, newId, startV, endV, time, value=> {
+                target.localScale = (Vector3)value;
             });
 
             return myT;
@@ -386,11 +380,11 @@ namespace PTween
         /// <param name="endV">End rotation</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<Vector3> TweenRotation(Transform target, Vector3 startV, Vector3 endV, float time)
+        public static Tween TweenRotation(Transform target, Vector3 startV, Vector3 endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Rotation_{TwCount}";
-            Tween<Vector3> myT = new(target, newId, startV, endV, time, value=> {
-                target.eulerAngles = value;
+            Tween myT = new(target, newId, startV, endV, time, value=> {
+                target.eulerAngles = (Vector3)value;
             });
 
             return myT;
@@ -404,11 +398,11 @@ namespace PTween
         /// <param name="endV">End rotation</param>
         /// <param name="time">Amount of seconds</param>
         /// <returns></returns>
-        public static Tween<Vector3> TweenLocalRotation(Transform target, Vector3 startV, Vector3 endV, float time)
+        public static Tween TweenLocalRotation(Transform target, Vector3 startV, Vector3 endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Rotation_{TwCount}";
-            Tween<Vector3> myT = new(target, newId, startV, endV, time, value=> {
-                target.localEulerAngles = value;
+            Tween myT = new(target, newId, startV, endV, time, value=> {
+                target.localEulerAngles = (Vector3)value;
             });
 
             return myT;

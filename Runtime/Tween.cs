@@ -5,13 +5,13 @@ using UnityEngine;
 namespace PTween
 {
 
-    public class Tween<T> : IPTween
+    public class Tween : IPTween
     {
 
-        private T _startVal;
-        private T _endVal;
+        private object _startVal;
+        private object _endVal;
         private float _time;
-        private Action<T> _onTweenUpdate;
+        private Action<object> _onTweenUpdate;
         private float _elapsedTime = 0f;
 
 
@@ -30,13 +30,13 @@ namespace PTween
         private Action _onThreshold;
         private Action _onUpdate;
         
-        private Tween<T> _appendedTween;
+        private Tween _appendedTween;
 
 
-        private T currentVal;
+        private object currentVal;
         private float t = 0, easedT = 0;
 
-        public Tween(object target, string id, T startV, T endV, float time, Action<T> tweenUpdate)
+        public Tween(object target, string id, object startV, object endV, float time, Action<object> tweenUpdate)
         {
             if(time <= 0f)
             {
@@ -51,7 +51,7 @@ namespace PTween
             _time = time;
             _onTweenUpdate = tweenUpdate;
 
-            PatoTween.I.AddTween<T>(this);
+            PatoTween.I.AddTween(this);
         }
 
         /// <summary> Returns the Target of this tween. </summary>
@@ -218,27 +218,25 @@ namespace PTween
             
         }
 
-        public T Interpolate(T start, T end, float Tm)
+        private static float startFloat = 0;
+
+        private object Interpolate(object start, object end, float Tm)
         {
-            if(start is float startFloat && end is float endFloat) 
-                return (T)(object)Mathf.LerpUnclamped(startFloat, endFloat, Tm);
+            if(start is float && end is float) 
+                return Mathf.LerpUnclamped((float)start, (float)end, Tm);
+            else
+            if(start is Vector3 && end is Vector3) 
+                return Vector3.LerpUnclamped((Vector3)start, (Vector3)end, Tm);
 
-            if(start is Vector2 startV2 && end is Vector2 endV2) 
-                return (T)(object)Vector2.LerpUnclamped(startV2, endV2, Tm);
+            else
+            if(start is Color && end is Color) 
+                return Color.Lerp((Color)start, (Color)end, Tm);
 
-            if(start is Vector3 startV3 && end is Vector3 endV3) 
-                return (T)(object)Vector3.LerpUnclamped(startV3, endV3, Tm);
-
-            if(start is Color startColor && end is Color endColor) 
-                return (T)(object)Color.Lerp(startColor, endColor, Tm);
-
-            if(start is bool startBool) 
-                return IsComplete ? (T)(object)!startBool : (T)(object)startBool ;
-
-            if(start is Sprite startSprite && end is Sprite endSprite) 
-                return IsComplete ? (T)(object)startSprite : (T)(object)endSprite;
-            
-            throw new NotImplementedException($"Interpolation for type {typeof(T)} is missing or not defined. --");
+            else
+            if(start is bool && end is bool) 
+                return IsComplete ? !(bool)start : (bool)end ;
+            else
+            throw new NotImplementedException($"Interpolation for given type is not defined. --");
         }
 
         #region  Property methods
@@ -247,7 +245,7 @@ namespace PTween
         /// Sets the Ease type of the tween to a given EaseType
         /// </summary>
         /// <returns></returns>
-        public Tween<T> SetEase(EaseType easeSet)
+        public Tween SetEase(EaseType easeSet)
         {
             _currentEase = easeSet;
             return this;
@@ -262,7 +260,7 @@ namespace PTween
         /// <br></br>false: After the tween ends, it restarts the given number of times
         ///</param>
         /// <returns></returns>
-        public Tween<T> SetLoops(bool pingPong = false, int loops = 2)
+        public Tween SetLoops(bool pingPong = false, int loops = 2)
         {
             if(loops < 2)
             {
@@ -281,7 +279,7 @@ namespace PTween
         /// Event (function) to execute
         ///</param>
         /// <returns></returns>
-        public Tween<T> OnComplete(Action onCompletion)
+        public Tween OnComplete(Action onCompletion)
         {
             this.onComplete += onCompletion;
             return this;
@@ -296,7 +294,7 @@ namespace PTween
         /// <br></br>false: DOES take into account the time scale 
         ///</param>
         /// <returns></returns>
-        public Tween<T> SetIgnoreTimeScale(bool setTo = true)
+        public Tween SetIgnoreTimeScale(bool setTo = true)
         {
             IgnoreTimeScale = setTo;
             return this;
@@ -310,7 +308,7 @@ namespace PTween
         /// Event (function) to execute
         ///</param>
         /// <returns></returns>
-        public Tween<T> OnUpdate(Action onUpdate)
+        public Tween OnUpdate(Action onUpdate)
         {
             _onUpdate = onUpdate;
             return this;
@@ -335,7 +333,7 @@ namespace PTween
         /// Event (function) to execute
         ///</param>
         /// <returns></returns>
-        public Tween<T> OnReachPrecentage(float percentage, Action onThreshold)
+        public Tween OnReachPrecentage(float percentage, Action onThreshold)
         {
             _originPercentThreshold = Mathf.Clamp01(percentage);
             _percentThreshold = _originPercentThreshold;
@@ -350,7 +348,7 @@ namespace PTween
         /// Time to wait
         ///</param>
         /// <returns></returns>
-        public Tween<T> SetStartDelay(float delay)
+        public Tween SetStartDelay(float delay)
         {
             Delay = delay;
             return this;
@@ -366,11 +364,11 @@ namespace PTween
         /// Event (function) to execute
         ///</param>
         /// <returns></returns>
-        public Tween<T> AppendTween(Tween<T> tweenT)
+        public Tween AppendTween(Tween tweenT)
         {
             tweenT.Pause();
 
-            Tween<T> _tweenCheck;
+            Tween _tweenCheck;
 
             if(_appendedTween == null)
             {
