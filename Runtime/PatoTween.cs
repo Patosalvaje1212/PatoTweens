@@ -79,11 +79,11 @@ namespace PTween
 
         #region helper methods
 
-        // Summary:
-        // Waits a determined number of seconds
-        // Parameters:
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Waits a determined number of seconds
+        /// </summary>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween WaitTime(float time)
         {
             Func<object> target = () => {
@@ -98,17 +98,14 @@ namespace PTween
         }
 
 
-        // Summary:
-        // Tweens and outputs a to a value on a determined time
-        // Parameters:
-        // target: 
-        // The target of the tween (input variable)
-        // result: 
-        // Output of the tween (output)
-        // endV: 
-        // End value of the tween
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Tweens and outputs a to a value on a determined time
+        /// </summary>
+        /// <param name="target">The target of the tween (input variable)</param>
+        /// <param name="result">Output of the tween (output)</param>
+        /// <param name="endV">End value of the tween</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenFloat(Func<float> target, Action<float> result, float endV, float time)
         {
             string newId = $"{target.Target.GetHashCode()}_{TwCount}_Float";
@@ -125,17 +122,14 @@ namespace PTween
         }
         
 
-        // Summary:
-        // Tweens and outputs a to a Vector3 on a determined time
-        // Parameters:
-        // target: 
-        // The target of the tween (input variable)
-        // result: 
-        // Output of the tween (output)
-        // endV: 
-        // End value of the tween 
-        // time: 
-        // Amount of seconds 
+        /// <summary>
+        /// Tweens and outputs a to a Vector3 on a determined time
+        /// </summary>
+        /// <param name="target">The target of the tween (input variable)</param>
+        /// <param name="result">Output of the tween (output)</param>
+        /// <param name="endV">End value of the tween </param>
+        /// <param name="time">Amount of seconds </param>
+        /// <returns></returns>
         public static Tween TweenVector3(Func<Vector3> target, Action<Vector3> result, Vector3 endV, float time)
         {
             string newId = $"{target.Target.GetHashCode()}_{TwCount}_Vector3";
@@ -153,17 +147,14 @@ namespace PTween
 
 
 
-        // Summary:
-        // Tweens and outputs a to a Color on a determined time
-        // Parameters:
-        // target: 
-        // The target of the tween (input variable)
-        // result: 
-        // Output of the tween (output)
-        // endV: 
-        // End value of the tween 
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Tweens and outputs a to a Color on a determined time
+        /// </summary>
+        /// <param name="target">The target of the tween (input variable)</param>
+        /// <param name="result">Output of the tween (output)</param>
+        /// <param name="endV">End value of the tween </param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenColor(Func<Color> target, Action<Color> result, Color endV, float time)
         {
             string newId = $"{target.Target.GetHashCode()}_{TwCount}_Color";
@@ -183,17 +174,14 @@ namespace PTween
 
         #region SpriteRenderer
 
-        // Summary:
-        // Tweens and sets the alpha of a SpriteRenderer on a determined time
-        // Parameters:
-        // target: 
-        // The target of the tween (input)
-        // startV: 
-        // Initial value of the tween
-        // endV: 
-        // End value of the tween
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Tweens and sets the alpha of a SpriteRenderer on a determined time
+        /// </summary>
+        /// <param name="target">The target of the tween (input)</param>
+        /// <param name="startV">Initial value of the tween</param>
+        /// <param name="endV">End value of the tween</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenSpriteAlpha(SpriteRenderer target, float startV, float endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Alpha_{TwCount}";
@@ -208,17 +196,14 @@ namespace PTween
         }
 
 
-        // Summary:
-        // Tweens and sets the alpha of a GameObject on a determined time
-        // Parameters:
-        // target: 
-        // The target of the tween (input)
-        // startV: 
-        // Initial value of the tween
-        // endV: 
-        // End value of the tween
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Tweens and sets the alpha of a GameObject on a determined time
+        /// </summary>
+        /// <param name="target">The target of the tween (input)</param>
+        /// <param name="startV">Initial value of the tween</param>
+        /// <param name="endV">End value of the tween</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenSpriteAlpha(GameObject gameobj, float startV, float endV, float time)
         {
 
@@ -237,17 +222,14 @@ namespace PTween
             return myT;
         }
 
-        // Summary:
-        // Tweens and sets the color of a SpriteRenderer on a determined time
-        // Parameters:
-        // target: 
-        // The target of the tween (input)
-        // startV: 
-        // Initial value of the tween
-        // endV: 
-        // End value of the tween
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Tweens and sets the color of a SpriteRenderer on a determined time
+        /// </summary>
+        /// <param name="target">The target of the tween (input)</param>
+        /// <param name="startV">Initial value of the tween</param>
+        /// <param name="endV">End value of the tween</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenSpriteColor(SpriteRenderer target, Color startV, Color endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Alpha_{TwCount}";
@@ -259,17 +241,14 @@ namespace PTween
         }
 
 
-        // Summary:
-        // Tweens and sets the color of a GameObject on a determined time
-        // Parameters:
-        // target: 
-        // The target of the tween (input)
-        // startV: 
-        // Initial value of the tween
-        // endV: 
-        // End value of the tween
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Tweens and sets the color of a GameObject on a determined time
+        /// </summary>
+        /// <param name="target">The target of the tween (input)</param>
+        /// <param name="startV">Initial value of the tween</param>
+        /// <param name="endV">End value of the tween</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenSpriteColor(GameObject gameobj, Color startV, Color endV, float time)
         {
 
@@ -286,17 +265,14 @@ namespace PTween
         }
 
 
-        // Summary:
-        // Waits a number of seconds and then switches the sprite of a SpriteRenderer
-        // Parameters:
-        // target: 
-        // The target of the tween (input)
-        // startV: 
-        // Initial sprite of the tween
-        // endV: 
-        // Sprite to switch to
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Waits a number of seconds and then switches the sprite of a SpriteRenderer
+        /// </summary>
+        /// <param name="target">The target of the tween (input)</param>
+        /// <param name="startV">Initial sprite of the tween</param>
+        /// <param name="endV">Sprite to switch to</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenSprite(SpriteRenderer target, Sprite startV, Sprite endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_SpriteChange_{TwCount}";
@@ -310,17 +286,14 @@ namespace PTween
 
 
 
-        // Summary:
-        // Waits a number of seconds and then switches the sprite of a GameObject
-        // Parameters:
-        // target: 
-        // The target of the tween (input)
-        // startV: 
-        // Initial sprite of the tween
-        // endV: 
-        // Sprite to switch to
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Waits a number of seconds and then switches the sprite of a GameObject
+        /// </summary>
+        /// <param name="target">The target of the tween (input)</param>
+        /// <param name="startV">Initial sprite of the tween</param>
+        /// <param name="endV">Sprite to switch to</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenSprite(GameObject gameobj, Sprite startV, Sprite endV, float time)
         {
 
@@ -345,17 +318,14 @@ namespace PTween
 
         #region Transform
 
-        // Summary:
-        // Tweens and sets the position of a given Transform
-        // Parameters:
-        // target: 
-        // The target of the tween (input)
-        // startV: 
-        // Initial position
-        // endV: 
-        // End position
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Tweens and sets the position of a given Transform
+        /// </summary>
+        /// <param name="target">The target of the tween (input)</param>
+        /// <param name="startV">Initial position</param>
+        /// <param name="endV">End position</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenPosition(Transform target, Vector3 startV, Vector3 endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Position_{TwCount}";
@@ -366,17 +336,14 @@ namespace PTween
             return myT;
         }
 
-        // Summary:
-        // Tweens and sets the position of a given Transform localy
-        // Parameters:
-        // target: 
-        // The target of the tween (input)
-        // startV: 
-        // Initial position
-        // endV: 
-        // End position
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Tweens and sets the position of a given Transform localy
+        /// </summary>
+        /// <param name="target">The target of the tween (input)</param>
+        /// <param name="startV">Initial position</param>
+        /// <param name="endV">End position</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenLocalPosition(Transform target, Vector3 startV, Vector3 endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Position_{TwCount}";
@@ -387,17 +354,14 @@ namespace PTween
             return myT;
         }
 
-        // Summary:
-        // Tweens and sets the scale of a given Transform localy
-        // Parameters:
-        // target: 
-        // The target of the tween (input)
-        // startV: 
-        // Initial scale
-        // endV: 
-        // End scale
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Tweens and sets the scale of a given Transform localy
+        /// </summary>
+        /// <param name="target">The target of the tween (input)</param>
+        /// <param name="startV">Initial scale</param>
+        /// <param name="endV">End scale</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenScale(Transform target, Vector3 startV, Vector3 endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Scale_{TwCount}";
@@ -408,17 +372,14 @@ namespace PTween
             return myT;
         }
 
-        // Summary:
-        // Tweens and sets the rotation of a given Transform
-        // Parameters:
-        // target: 
-        // The target of the tween (input)
-        // startV: 
-        // Initial rotation
-        // endV: 
-        // End rotation
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Tweens and sets the rotation of a given Transform
+        /// </summary>
+        /// <param name="target">The target of the tween (input)</param>
+        /// <param name="startV">Initial rotation</param>
+        /// <param name="endV">End rotation</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenRotation(Transform target, Vector3 startV, Vector3 endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Rotation_{TwCount}";
@@ -429,17 +390,14 @@ namespace PTween
             return myT;
         }
 
-        // Summary:
-        // Tweens and sets the rotation of a given Transform localy
-        // Parameters:
-        // target: 
-        // The target of the tween (input)
-        // startV: 
-        // Initial rotation
-        // endV: 
-        // End rotation
-        // time: 
-        // Amount of seconds
+        /// <summary>
+        /// Tweens and sets the rotation of a given Transform localy
+        /// </summary>
+        /// <param name="target">The target of the tween (input)</param>
+        /// <param name="startV">Initial rotation</param>
+        /// <param name="endV">End rotation</param>
+        /// <param name="time">Amount of seconds</param>
+        /// <returns></returns>
         public static Tween TweenLocalRotation(Transform target, Vector3 startV, Vector3 endV, float time)
         {
             string newId = $"{target.GetInstanceID()}_Rotation_{TwCount}";
