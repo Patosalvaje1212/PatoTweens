@@ -54,34 +54,49 @@ namespace PTween
             PatoTween.I.AddTween(this);
         }
 
-        /// <summary> Returns the Target of this tween. </summary>
-        /// <remarks> Cant change its value after creating the tween. </remarks> 
+        // Summary:
+        //          Returns the Target of this tween.
+        // Remarks:
+        //          Cant change its value after creating the tween.
         public object Target { get; private set; }
         
-        /// <summary> Returns true if the tween has finished executing. </summary>
+        // Summary:
+        //          Returns true if the tween has finished executing.
         public bool IsComplete { get; private set; }
         
-        /// <summary> Returns true if the Target of this tween was destroyed while it was executing. </summary>
-        /// <remarks> You can access the Target via the Target variable. </remarks> 
+        // Summary:
+        //          Returns true if the Target of this tween was destroyed while it was executing.
+        // Remarks:
+        //          You can access the Target via the Target variable.
         public bool WasKilled { get; private set; }
         
-        /// <summary> Returns true if the Tween is paused. </summary>
-        /// <remarks> You can pause/resume a tween with Pause()/Resume() methods respectively. </remarks> 
+        // Summary:
+        //          Returns true if the Tween is paused.
+        // Remarks:
+        //          You can pause/resume a tween with Pause()/Resume() methods respectively.
         public bool IsPaused { get; private set; }
         
-        /// <summary> Returns true if this tween ignores the time scale. </summary>
-        /// <remarks> You can change this value via the SetIgnoreTimeScale() method. </remarks> 
+        // Summary:
+        //          Returns true if this tween ignores the time scale.
+        // Remarks:
+        //          You can change this value via the SetIgnoreTimeScale() method.
         public bool IgnoreTimeScale { get; private set; }
 
-        /// <summary> Returns the identifier of this tween. </summary>
-        /// <remarks> Cant change its value after creating the tween. </remarks> 
+        // Summary:
+        //          Returns the identifier of this tween.
+        // Remarks:
+        //          Cant change its value after creating the tween.
         public string Identifier { get; private set; }
-        /// <summary> Returns the Delay of this tween. </summary>
-        /// <remarks> You can set this value with the SetStartDelay() method. </remarks> 
+        // Summary:
+        //          Returns the Delay of this tween.
+        // Remarks:
+        //          You can set this value with the SetStartDelay() method.
         public float Delay { get; private set; }
 
-        /// <summary> Returns the methods to execute when the tween completes. </summary>
-        /// <remarks> You can set this value with the OnComplete() method. </remarks> 
+        // Summary:
+        //          Returns the methods to execute when the tween completes.
+        // Remarks:
+        //          You can set this value with the OnComplete() method.
         public Action onComplete { get; set; }
 
 
@@ -241,25 +256,27 @@ namespace PTween
 
         #region  Property methods
 
-        /// <summary>
-        /// Sets the Ease type of the tween to a given EaseType
-        /// </summary>
-        /// <returns></returns>
+        // Summary:
+        //         
+        // Sets the Ease type of the tween to a given EaseType
+        //
+
         public Tween SetEase(EaseType easeSet)
         {
             _currentEase = easeSet;
             return this;
         }
 
-        /// <summary>
-        /// Manage the loop mode and number
-        /// </summary>
-        /// <param name="pingPong">
-        /// Mode of the Pingpong
-        /// <br></br>true: After the tween ends, it restarts in the opposite direction
-        /// <br></br>false: After the tween ends, it restarts the given number of times
-        ///</param>
-        /// <returns></returns>
+        // Summary:
+        //         
+        // Manage the loop mode and number
+        //
+        // Parameters: 
+        //      pingPong:
+        // Mode of the Pingpong
+        //       true: After the tween ends, it restarts in the opposite direction
+        //       false: After the tween ends, it restarts the given number of times
+
         public Tween SetLoops(bool pingPong = false, int loops = 2)
         {
             if(loops < 2)
@@ -272,28 +289,30 @@ namespace PTween
             return this;
         }
         
-        /// <summary>
-        /// Execute the given function when the tween finishes
-        /// </summary>
-        /// <param name="onCompletion">
-        /// Event (function) to execute
-        ///</param>
-        /// <returns></returns>
+        // Summary:
+        //         
+        // Execute the given function when the tween finishes
+        //
+        // Parameters: 
+        //      onCompletion:
+        // Event (function) to execute
+
         public Tween OnComplete(Action onCompletion)
         {
             this.onComplete += onCompletion;
             return this;
         }
 
-        /// <summary>
-        /// Set the Ignore time scale value
-        /// </summary>
-        /// <param name="setTo">
-        /// Mode to set
-        /// <br></br>true: DOES NOT take into account the time scale
-        /// <br></br>false: DOES take into account the time scale 
-        ///</param>
-        /// <returns></returns>
+        // Summary:
+        //         
+        // Set the Ignore time scale value
+        //
+        // Parameters: 
+        //      setTo:
+        // Mode to set
+        //       true: DOES NOT take into account the time scale
+        //       false: DOES take into account the time scale 
+
         public Tween SetIgnoreTimeScale(bool setTo = true)
         {
             IgnoreTimeScale = setTo;
@@ -301,38 +320,43 @@ namespace PTween
         }
 
 
-        /// <summary>
-        /// Execute the given function each tick the tween is active
-        /// </summary>
-        /// <param name="onUpdate">
-        /// Event (function) to execute
-        ///</param>
-        /// <returns></returns>
+        // Summary:
+        //         
+        // Execute the given function each tick the tween is active
+        //
+        // Parameters: 
+        //      onUpdate:
+        // Event (function) to execute
+
         public Tween OnUpdate(Action onUpdate)
         {
             _onUpdate = onUpdate;
             return this;
         }
 
-        /// <summary>
-        /// Execute the given function when the tween reaches a certain percentage.
-        /// </summary>
-        /// <remarks> 
-        /// NOTE: This variable will be set to the last value give. Multiple calls of this function will override previous values.
-        /// <br></br> You can create mirror tweens (WaitTime()) to check for more percentages.
-        /// </remarks> 
-        /// <param name="percentage">
-        /// Percentage at wich the even will be executed (0, 1)
-        /// <br></br> 
-        ///</param>
-        /// <param name="onThreshold">
-        /// <remarks> 
-        /// NOTE: This variable will be set to the last value give. Multiple calls of this function will override previous values.
-        /// You can create mirror tweens (WaitTime()) to check for more percentages.
-        /// </remarks> 
-        /// Event (function) to execute
-        ///</param>
-        /// <returns></returns>
+        // Summary:
+        //         
+        // Execute the given function when the tween reaches a certain percentage.
+        //
+        // Remarks:
+        //          
+        // NOTE: This variable will be set to the last value give. Multiple calls of this function will override previous values.
+        //        You can create mirror tweens (WaitTime()) to check for more percentages.
+        //
+        // Parameters: 
+        //      percentage:
+        // Percentage at wich the even will be executed (0, 1)
+        //        
+        // 
+        //      onThreshold:
+        // Action to execute
+        // Remarks:
+        //          
+        // NOTE: This variable will be set to the last value give. Multiple calls of this function will override previous values.
+        // You can create mirror tweens (WaitTime()) to check for more percentages.
+        //
+        // Event (function) to execute
+
         public Tween OnReachPrecentage(float percentage, Action onThreshold)
         {
             _originPercentThreshold = Mathf.Clamp01(percentage);
@@ -341,29 +365,32 @@ namespace PTween
             return this;
         }
 
-        /// <summary>
-        /// Make the tween wait a time in seconds BEFORE executing
-        /// </summary>
-        /// <param name="delay">
-        /// Time to wait
-        ///</param>
-        /// <returns></returns>
+        // Summary:
+        //         
+        // Make the tween wait a time in seconds BEFORE executing
+        //
+        // Parameters: 
+        //      delay:
+        // Time to wait
+
         public Tween SetStartDelay(float delay)
         {
             Delay = delay;
             return this;
         }
 
-        /// <summary>
-        /// Execute the given Tween after the current one has ended.
-        /// </summary>
-        /// <remarks> 
-        /// NOTE: Multiple calls of this function, will result on a chain. If you want multiple functions to execute, use OnComplete()
-        /// </remarks> 
-        /// <param name="onUpdate">
-        /// Event (function) to execute
-        ///</param>
-        /// <returns></returns>
+        // Summary:
+        //         
+        // Execute the given Tween after the current one has ended.
+        //
+        // Remarks:
+        //          
+        // NOTE: Multiple calls of this function, will result on a chain. If you want multiple functions to execute, use OnComplete()
+        //
+        // Parameters: 
+        //      onUpdate:
+        // Event (function) to execute
+
         public Tween AppendTween(Tween tweenT)
         {
             tweenT.Pause();
