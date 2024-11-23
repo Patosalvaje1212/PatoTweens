@@ -61,7 +61,7 @@ namespace PTween
             
             if(_activeTweens.ContainsKey(tween.Identifier))
             {
-                throw new OverflowException($"A tween with id {tween.Identifier} already exist. Do not tween the same value at the same time");                
+                Debug.LogWarning($"A tween with id {tween.Identifier} already exist. Do not tween the same value at the same time");                
             }
 
             _activeTweens.Add(tween.Identifier, tween);
