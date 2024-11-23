@@ -404,162 +404,247 @@ namespace PTween
         #region Ease logic
         
         
-        public static float Linear(float t) => t;
+        // Linear
+        public static float Linear(float t)
+        {
+            return t;
+        }
 
-        public static float EaseInSine(float t) => 1 - Mathf.Cos(t * Mathf.PI * .5f);
+        // InSine
+        public static float InSine(float t)
+        {
+            return 1 - Mathf.Cos(t * Mathf.PI / 2);
+        }
 
-        public static float EaseOutSine(float t) => Mathf.Sin(t * Mathf.PI * .5f);
+        // OutSine
+        public static float OutSine(float t)
+        {
+            return Mathf.Sin(t * Mathf.PI / 2);
+        }
 
-        public static float EaseInOutSine(float t) => -(Mathf.Cos(Mathf.PI * t) - 1) * .5f;
+        // InOutSine
+        public static float InOutSine(float t)
+        {
+            return -0.5f * (Mathf.Cos(Mathf.PI * t) - 1);
+        }
 
-        public static float EaseInQuad(float t) => t * t;
+        // InQuad
+        public static float InQuad(float t)
+        {
+            return t * t;
+        }
 
-        public static float EaseOutQuad(float t) => t * (2 - t);
+        // OutQuad
+        public static float OutQuad(float t)
+        {
+            return 1 - (1 - t) * (1 - t);
+        }
 
-        public static float EaseInOutQuad(float t) => t == 0
-            ? 0
-            : t == 1
-            ? 1
-            : t < 0.5f
-            ? EaseInQuad(t * 2f)  * .5f
-            : .5f + EaseOutQuad((t -.5f) * 2f)  * .5f ;
+        // InOutQuad
+        public static float InOutQuad(float t)
+        {
+            return t < 0.5f ? 2 * t * t : 1 - Mathf.Pow(-2 * t + 2, 2) / 2;
+        }
 
-        public static float EaseInCubic(float t) => t * t * t;
+        // InCubic
+        public static float InCubic(float t)
+        {
+            return t * t * t;
+        }
 
-        public static float EaseOutCubic(float t) => 1 - (1 - t) * (1 - t) * (1 - t);
+        // OutCubic
+        public static float OutCubic(float t)
+        {
+            return 1 - Mathf.Pow(1 - t, 3);
+        }
 
-        public static float EaseInOutCubic(float t) => t == 0
-            ? 0
-            : t == 1
-            ? 1
-            : t < 0.5f
-            ? EaseInCubic(t * 2f)  * .5f
-            : .5f + EaseOutCubic((t -.5f) * 2f)  * .5f ;
+        // InOutCubic
+        public static float InOutCubic(float t)
+        {
+            return t < 0.5f ? 4 * t * t * t : 1 - Mathf.Pow(-2 * t + 2, 3) / 2;
+        }
 
-        public static float EaseInQuart(float t) => t * t * t * t;
+        // InQuart
+        public static float InQuart(float t)
+        {
+            return t * t * t * t;
+        }
 
-        public static float EaseOutQuart(float t) => 1 - (1 - t) * (1 - t) * (1 - t) * (1 - t);
+        // OutQuart
+        public static float OutQuart(float t)
+        {
+            return 1 - Mathf.Pow(1 - t, 4);
+        }
 
-        public static float EaseInOutQuart(float t)  => t == 0
-            ? 0
-            : t == 1
-            ? 1
-            : t < 0.5f
-            ? EaseInQuart(t * 2f)  * .5f
-            : .5f + EaseOutQuart((t -.5f) * 2f)  * .5f ;
+        // InOutQuart
+        public static float InOutQuart(float t)
+        {
+            return t < 0.5f ? 8 * t * t * t * t : 1 - Mathf.Pow(-2 * t + 2, 4) / 2;
+        }
 
-        public static float EaseInQuint(float t) => t * t * t * t * t;
+        // InQuint
+        public static float InQuint(float t)
+        {
+            return t * t * t * t * t;
+        }
 
-        public static float EaseOutQuint(float t) => 1 - (1 - t) * (1 - t) * (1 - t) * (1 - t) * (1 - t);
+        // OutQuint
+        public static float OutQuint(float t)
+        {
+            return 1 - Mathf.Pow(1 - t, 5);
+        }
 
-        public static float EaseInOutQuint(float t) => t == 0
-            ? 0
-            : t == 1
-            ? 1
-            : t < 0.5f
-            ? EaseInQuint(t * 2f)  * .5f
-            : .5f + EaseOutQuint((t -.5f) * 2f)  * .5f ;
+        // InOutQuint
+        public static float InOutQuint(float t)
+        {
+            return t < 0.5f ? 16 * t * t * t * t * t : 1 - Mathf.Pow(-2 * t + 2, 5) / 2;
+        }
 
-        public static float EaseInExpo(float t) => t == 0 ? 0 : Mathf.Pow(2, 10 * (t - 1));
+        // InExpo
+        public static float InExpo(float t)
+        {
+            return t == 0 ? 0 : Mathf.Pow(2, 10 * (t - 1));
+        }
 
-        public static float EaseOutExpo(float t) => t == 1 ? 1 : 1 - Mathf.Pow(2, -10 * t);
+        // OutExpo
+        public static float OutExpo(float t)
+        {
+            return t == 1 ? 1 : 1 - Mathf.Pow(2, -10 * t);
+        }
 
-        public static float EaseInOutExpo(float t) => t == 0
-            ? 0
-            : t == 1
-            ? 1
-            : t < 0.5f
-            ? Mathf.Pow(2, (20 * t) - 10) / 2
-            : (2 - Mathf.Pow(2, (-20 * t) + 10)) * .5f;
+        // InOutExpo
+        public static float InOutExpo(float t)
+        {
+            return t == 0 ? 0 : t == 1 ? 1 : t < 0.5f ? Mathf.Pow(2, 20 * t - 10) / 2 : (2 - Mathf.Pow(2, -20 * t + 10)) / 2;
+        }
 
-        public static float EaseInCirc(float t) => 1 - Mathf.Sqrt(1 - Mathf.Pow(t, 2));
+        // InCirc
+        public static float InCirc(float t)
+        {
+            return 1 - Mathf.Sqrt(1 - t * t);
+        }
 
-        public static float EaseOutCirc(float t) => Mathf.Sqrt(1 - Mathf.Pow(t - 1, 2));
+        // OutCirc
+        public static float OutCirc(float t)
+        {
+            return Mathf.Sqrt(1 - Mathf.Pow(t - 1, 2));
+        }
 
-        public static float EaseInOutCirc(float t) => t == 0
-            ? 0
-            : t == 1
-            ? 1
-            : t < 0.5f
-            ? EaseInCirc(t * 2f)  * .5f
-            : .5f + EaseOutCirc((t -.5f) * 2f)  * .5f ;
+        // InOutCirc
+        public static float InOutCirc(float t)
+        {
+            return t < 0.5f ? (1 - Mathf.Sqrt(1 - 4 * t * t)) / 2 : (Mathf.Sqrt(1 - Mathf.Pow(-2 * t + 2, 2)) + 1) / 2;
+        }
 
-        public static float EaseInElastic(float t) => t == 0 
-            ? 0
-            : t == 1
-            ? 1
-            : (Mathf.Pow(2, -20 * t + 10) * Mathf.Sin((20 * t - 11.125f) * (2 * Mathf.PI) / 4.5f)) + 1;
+        // InElastic
+        public static float InElastic(float t)
+        {
+            float s = 1.70158f;
+            return t == 0 ? 0 : t == 1 ? 1 : Mathf.Pow(2, 10 * (t - 1)) * Mathf.Sin((t - 1 - s / 4) * (2 * Mathf.PI) / s);
+        }
 
-        public static float EaseOutElastic(float t) => t == 0 
-            ? 0
-            : t == 1
-            ? 1
-            : -(Mathf.Pow(2, 20 * t - 10) * Mathf.Sin((20 * t - 11.125f) * (2 * Mathf.PI) / 4.5f));
+        // OutElastic
+        public static float OutElastic(float t)
+        {
+            float s = 1.70158f;
+            return t == 0 ? 0 : t == 1 ? 1 : Mathf.Pow(2, -10 * t) * Mathf.Sin((t - s / 4) * (2 * Mathf.PI) / s) + 1;
+        }
 
-        public static float EaseInOutElastic(float t) => t == 0
-            ? 0
-            : t == 1
-            ? 1
-            : t < 0.5
-            ? -(Mathf.Pow(2, 20 * t - 10) * Mathf.Sin((20 * t - 11.125f) * (2 * Mathf.PI) / 4.5f)) / 2
-            : (Mathf.Pow(2, -20 * t + 10) * Mathf.Sin((20 * t - 11.125f) * (2 * Mathf.PI) / 4.5f)) / 2 + 1;
-        
+        // InOutElastic
+        public static float InOutElastic(float t)
+        {
+            float s = 1.70158f;
+            return t == 0 ? 0 : t == 1 ? 1 : t < 0.5f ? Mathf.Pow(2, 20 * t - 10) * Mathf.Sin((20 * t - 11.125f) * (2 * Mathf.PI) / s) / 2 : Mathf.Pow(2, -20 * t + 10) * Mathf.Sin((20 * t - 11.125f) * (2 * Mathf.PI) / s) / 2 + 1;
+        }
 
-        public static float EaseInBack(float t) => t * t * t - t * Mathf.Sin(t * Mathf.PI);
+        // InBack
+        public static float InBack(float t)
+        {
+            float s = 1.70158f;
+            return t * t * ((s + 1) * t - s);
+        }
 
-        public static float EaseOutBack(float t) => 1 - (1 - t) * (1 - t) * (1 - t) - Mathf.Sin(t * Mathf.PI);
+        // OutBack
+        public static float OutBack(float t)
+        {
+            float s = 1.70158f;
+            return 1 + (t - 1) * (t - 1) * ((s + 1) * (t - 1) + s);
+        }
 
-        public static float EaseInOutBack(float t) => t == 0
-            ? 0
-            : t == 1
-            ? 1
-            : t < 0.5f
-            ? EaseInBack(t * 2f)  * .5f
-            : .5f + EaseOutBack((t -.5f) * 2f)  * .5f ;
+        // InOutBack
+        public static float InOutBack(float t)
+        {
+            float s = 1.70158f * 1.525f;
+            return t < 0.5f ? (2 * t * t * ((s + 1) * 2 * t - s)) / 2 : (2 * (t - 1) * (t - 1) * ((s + 1) * (t - 1) + s) + 2) / 2;
+        }
 
-        public static float EaseInBounce(float t) => 1 - EaseOutBounce(1 - t);
+        // InBounce
+        public static float InBounce(float t)
+        {
+            return 1 - OutBounce(1 - t);
+        }
 
-        public static float EaseOutBounce(float t) => t < 1 / 2.75f
-            ? 7.5625f * t * t
-            : t < 2 / 2.75f
-            ? 7.5625f * (t -= 1.5f / 2.75f) * t + 0.75f
-            : t < 2.5 / 2.75f
-            ? 7.5625f * (t -= 2.25f / 2.75f) * t + 0.9375f
-            : 7.5625f * (t -= 2.625f / 2.75f) * t + 0.984375f;
+        // OutBounce
+        public static float OutBounce(float t)
+        {
+            if (t < 1 / 2.75f) {
+                return 7.5625f * t * t;
+            } else if (t < 2 / 2.75f) {
+                t -= 1.5f / 2.75f;
+                return 7.5625f * t * t + 0.75f;
+            } else if (t < 2.5 / 2.75f) {
+                t -= 2.25f / 2.75f;
+                return 7.5625f * t * t + 0.9375f;
+            } else {
+                t -= 2.625f / 2.75f;
+                return 7.5625f * t * t + 0.984375f;
+            }
+        }
 
-        public static float EaseInOutBounce(float t) => t == 0
-            ? 0
-            : t == 1
-            ? 1
-            : t < 0.5f
-            ? EaseInBounce(t * 2f)  * .5f
-            : .5f + EaseOutBounce((t -.5f) * 2f)  * .5f ;
+        // InOutBounce
+        public static float InOutBounce(float t)
+        {
+            return t < 0.5f ? (1 - OutBounce(1 - 2 * t)) / 2 : (1 + OutBounce(2 * t - 1)) / 2;
+        }
 
-        public static float EaseInElasticOvershoot(float t) => t == 0 ? 0 : t == 1 ? 1 : Mathf.Pow(2, 10 * (t - 1)) * Mathf.Sin((t - 1.1f) * -5 * Mathf.PI) * 1.5f;
+        // InElasticOvershoot
+        public static float InElasticOvershoot(float t)
+        {
+            float s = 1.70158f;
+            return t == 0 ? 0 : t == 1 ? 1 : Mathf.Pow(2, 10 * (t - 1)) * Mathf.Sin((t - 1 - s / 4) * (2 * Mathf.PI) / s) + 0.75f;
+        }
 
-        public static float EaseOutElasticOvershoot(float t) => t == 0 ? 0 : t == 1 ? 1 : Mathf.Pow(2, -10 * t) * Mathf.Sin((t - 0.1f) * 5 * Mathf.PI) * 1.5f + 1;
+        // OutElasticOvershoot
+        public static float OutElasticOvershoot(float t)
+        {
+            float s = 1.70158f;
+            return t == 0 ? 0 : t == 1 ? 1 : Mathf.Pow(2, -10 * t) * Mathf.Sin((t - s / 4) * (2 * Mathf.PI) / s) + 1.25f;
+        }
 
-        public static float EaseInOutElasticOvershoot(float t) => t == 0
-            ? 0
-            : t == 1
-            ? 1
-            : t < 0.5f
-            ? EaseInElasticOvershoot(t * 2f)  * .5f
-            : .5f + EaseOutElasticOvershoot((t -.5f) * 2f)  * .5f ;
+        // InOutElasticOvershoot
+        public static float InOutElasticOvershoot(float t)
+        {
+            float s = 1.70158f;
+            return t == 0 ? 0 : t == 1 ? 1 : t < 0.5f ? Mathf.Pow(2, 20 * t - 10) * Mathf.Sin((20 * t - 11.125f) * (2 * Mathf.PI) / s) / 2 + 0.875f : Mathf.Pow(2, -20 * t + 10) * Mathf.Sin((20 * t - 11.125f) * (2 * Mathf.PI) / s) / 2 + 1.25f;
+        }
 
-        public static float EaseInSinusoidal(float t) => 1 - Mathf.Cos(t * Mathf.PI * .5f);
+        // InSinusoidal
+        public static float InSinusoidal(float t)
+        {
+            return 1 - Mathf.Cos(t * Mathf.PI / 2);
+        }
 
-        public static float EaseOutSinusoidal(float t) => Mathf.Sin(t * Mathf.PI * .5f);
+        // OutSinusoidal
+        public static float OutSinusoidal(float t)
+        {
+            return Mathf.Sin(t * Mathf.PI / 2);
+        }
 
-        public static float EaseInOutSinusoidal(float t)  => t == 0
-            ? 0
-            : t == 1
-            ? 1
-            : t < 0.5f
-            ? EaseInSinusoidal(t * 2f)  * .5f
-            : .5f + EaseOutSinusoidal((t -.5f) * 2f)  * .5f ;
-
-
+        // InOutSinusoidal
+        public static float InOutSinusoidal(float t)
+        {
+            return -0.5f * (Mathf.Cos(Mathf.PI * t) - 1);
+        }
         public static float EaseMult(EaseType easingType, float t)
         {
             return easingType switch
