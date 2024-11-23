@@ -484,19 +484,19 @@ namespace PTween
             ? EaseInCirc(t * 2f)  * .5f
             : .5f + EaseOutCirc((t -.5f) * 2f)  * .5f ;
 
-        public static float EaseInElastic(float t) => x == 0 
+        public static float EaseInElastic(float t) => t == 0 
             ? 0
             : t == 1
             ? 1
             : (Mathf.Pow(2, -20 * t + 10) * Mathf.Sin((20 * t - 11.125f) * (2 * Mathf.PI) / 4.5f)) + 1;
 
-        public static float EaseOutElastic(float t) => x == 0 
+        public static float EaseOutElastic(float t) => t == 0 
             ? 0
             : t == 1
             ? 1
             : -(Mathf.Pow(2, 20 * t - 10) * Mathf.Sin((20 * t - 11.125f) * (2 * Mathf.PI) / 4.5f));
 
-        public static float EaseInOutElastic(float t) => x == 0
+        public static float EaseInOutElastic(float t) => t == 0
             ? 0
             : t == 1
             ? 1
