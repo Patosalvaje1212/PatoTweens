@@ -33,19 +33,20 @@ namespace PTween
         {
             foreach(var current in _activeTweens)
             {
-                
-                current.Value.Update();
-
                 if(current.Value.WasKilled)
                 {
                     _toErease.Add(current.Key);
                 }
+                else
                 if(current.Value.IsComplete)
                 {
                     current.Value.onComplete?.Invoke();
 
                     _toErease.Add(current.Key);
                 }
+                else
+                current.Value.Update();
+                
             }
 
             for (int i = _toErease.Count - 1; i >= 0; i--)
