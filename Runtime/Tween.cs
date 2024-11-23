@@ -488,21 +488,21 @@ namespace PTween
             ? 0
             : t == 1
             ? 1
-            : (Math.pow(2, -20 * t + 10) * Math.sin((20 * t - 11.125) * (2 * Math.PI) / 4.5)) + 1;
+            : (Mathf.Pow(2, -20 * t + 10) * Mathf.Sin((20 * t - 11.125) * (2 * Mathf.PI) / 4.5)) + 1;
 
         public static float EaseOutElastic(float t) => x == 0 
             ? 0
             : t == 1
             ? 1
-            : -(Math.pow(2, 20 * t - 10) * Math.sin((20 * t - 11.125) * (2 * Math.PI) / 4.5));
+            : -(Mathf.Pow(2, 20 * t - 10) * Mathf.Sin((20 * t - 11.125) * (2 * Mathf.PI) / 4.5));
 
         public static float EaseInOutElastic(float t) => x == 0
             ? 0
             : t == 1
             ? 1
             : t < 0.5
-            ? -(Math.pow(2, 20 * t - 10) * Math.sin((20 * t - 11.125) * (2 * Math.PI) / 4.5)) / 2
-            : (Math.pow(2, -20 * t + 10) * Math.sin((20 * t - 11.125) * (2 * Math.PI) / 4.5)) / 2 + 1;
+            ? -(Mathf.Pow(2, 20 * t - 10) * Mathf.Sin((20 * t - 11.125) * (2 * Mathf.PI) / 4.5)) / 2
+            : (Mathf.Pow(2, -20 * t + 10) * Mathf.Sin((20 * t - 11.125) * (2 * Mathf.PI) / 4.5)) / 2 + 1;
         
 
         public static float EaseInBack(float t) => t * t * t - t * Mathf.Sin(t * Mathf.PI);
