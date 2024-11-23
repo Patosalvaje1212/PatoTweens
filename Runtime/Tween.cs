@@ -484,26 +484,26 @@ namespace PTween
             ? EaseInCirc(t * 2f)  * .5f
             : .5f + EaseOutCirc((t -.5f) * 2f)  * .5f ;
 
-        public static float EaseInElastic(float t) => ? 0
-            : x == 1
-            ? 1
-            : (Math.pow(2, -20 * x + 10) * Math.sin((20 * x - 11.125) * (2 * Math.PI) / 4.5)) + 1;
-
-        public static float EaseOutElastic(float t) => ? 0
-            : x == 1
-            ? 1
-            : -(Math.pow(2, 20 * x - 10) * Math.sin((20 * x - 11.125) * (2 * Math.PI) / 4.5));
-
-        public static float EaseInOutElastic(float t)
-        {
-            return
+        public static float EaseInElastic(float t) => x == 0 
             ? 0
-            : x == 1
+            : t == 1
             ? 1
-            : x < 0.5
-            ? -(Math.pow(2, 20 * x - 10) * Math.sin((20 * x - 11.125) * (2 * Math.PI) / 4.5)) / 2
-            : (Math.pow(2, -20 * x + 10) * Math.sin((20 * x - 11.125) * (2 * Math.PI) / 4.5)) / 2 + 1;
-        }
+            : (Math.pow(2, -20 * t + 10) * Math.sin((20 * t - 11.125) * (2 * Math.PI) / 4.5)) + 1;
+
+        public static float EaseOutElastic(float t) => x == 0 
+            ? 0
+            : t == 1
+            ? 1
+            : -(Math.pow(2, 20 * t - 10) * Math.sin((20 * t - 11.125) * (2 * Math.PI) / 4.5));
+
+        public static float EaseInOutElastic(float t) => x == 0
+            ? 0
+            : t == 1
+            ? 1
+            : t < 0.5
+            ? -(Math.pow(2, 20 * t - 10) * Math.sin((20 * t - 11.125) * (2 * Math.PI) / 4.5)) / 2
+            : (Math.pow(2, -20 * t + 10) * Math.sin((20 * t - 11.125) * (2 * Math.PI) / 4.5)) / 2 + 1;
+        
 
         public static float EaseInBack(float t) => t * t * t - t * Mathf.Sin(t * Mathf.PI);
 
