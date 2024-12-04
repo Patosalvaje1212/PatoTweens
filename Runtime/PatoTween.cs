@@ -40,7 +40,7 @@ namespace PTween
                 else
                 if(current.Value.IsComplete)
                 {
-                    current.Value.onComplete?.Invoke();
+                    current.Value?.onComplete?.Invoke();
 
                     _toErease.Add(current.Key);
                 }
