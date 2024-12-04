@@ -91,7 +91,7 @@ namespace PTween
                 return true;
             };
 
-            string newId = $"{target.Target.GetHashCode()}_WaitingTime - {TwCount}";
+            string newId = $"{Random.value}_{TwCount}_WaitingTime";
 
             Tween myT = new(target, newId, true, true, time, value => {});
 
