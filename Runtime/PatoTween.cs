@@ -91,7 +91,7 @@ namespace PTween
                 return true;
             };
 
-            string newId = $"{System.Random.Next()}_{TwCount}_WaitingTime";
+            string newId = $"{new System.Random.Next()}_{TwCount}_WaitingTime";
 
             Tween myT = new(target, newId, true, true, time, value => {});
 
