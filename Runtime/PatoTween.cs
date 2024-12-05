@@ -87,11 +87,9 @@ namespace PTween
         /// <returns></returns>
         public static Tween WaitTime(float time)
         {
-            Func<object> target = () => {
-                return true;
-            };
+            int target = new System.Random.Next();
 
-            string newId = $"{new System.Random.Next()}_{TwCount}_WaitingTime";
+            string newId = $"{target}_{TwCount}_WaitingTime";
 
             Tween myT = new(target, newId, true, true, time, value => {});
 

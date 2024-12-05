@@ -89,17 +89,7 @@ namespace PTween
         public bool IsTargetDestroyed()
         {
             
-            if(Target is MonoBehaviour mono && mono == null)
-            {
-                return true;
-            }
-
-            if(Target is GameObject go && go == null)
-            {
-                return true;
-            }
-
-            if(Target is Delegate del && del == null)
+            if(Target == null)
             {
                 return true;
             }
